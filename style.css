@@ -63,3 +63,11 @@ button:hover {
     font-size: 16px;
     font-weight: bold;
 }
+
+#netPrice, #commission {
+    font-weight: bold;
+}
+
+#netPrice.red, #commission.red {
+    color: red;
+}
