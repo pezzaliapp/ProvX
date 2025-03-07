@@ -18,15 +18,15 @@ document.addEventListener("DOMContentLoaded", function () {
         let baseRate, maxDiscount;
         switch (category) {
             case "rivenditore":
-                baseRate = 1; // 1%
+                baseRate = 0.01; // 1%
                 maxDiscount = 60;
                 break;
             case "smontagomme":
-                baseRate = 7; // 7%
+                baseRate = 0.07; // 7%
                 maxDiscount = 55;
                 break;
             case "sollevamento":
-                baseRate = 3; // 3%
+                baseRate = 0.03; // 3%
                 maxDiscount = 50;
                 break;
             default:
@@ -43,8 +43,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         let netPrice = price * (1 - discount / 100);
-        let commission = calculateCommission(price, netPrice, discount, category);
-        let commissionPercent = calculateCommissionPercent(price, netPrice, discount, category);
+        let commission = calculateCommission(price, netPrice, discount, maxDiscount, baseRate);
+        let commissionPercent = calculateCommissionPercent(price, discount, maxDiscount, baseRate);
         let discountedPrice60 = price * 0.4; // Prezzo scontato del 60%
         let netCompany = netPrice - commission; // Netto azienda senza costi vari
 
@@ -70,63 +70,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-function calculateCommission(price, netPrice, discount, category) {
-    let baseRate, maxDiscount;
-
-    switch (category) {
-        case "rivenditore":
-            baseRate = 0.01; // 1%
-            maxDiscount = 60;
-            break;
-        case "smontagomme":
-            baseRate = 0.07; // 7%
-            maxDiscount = 55;
-            break;
-        case "sollevamento":
-            baseRate = 0.03; // 3%
-            maxDiscount = 50;
-            break;
-        default:
-            return 0;
-    }
-
-    if (discount === maxDiscount) {
-        return netPrice * baseRate;
-    } else if (discount < maxDiscount) {
-        let difference = maxDiscount - discount;
-        let extraCommissionRate = baseRate / 2;
-        let extraCommission = (price * (difference / 100) / 2) * extraCommissionRate;
-        return (netPrice * baseRate) + extraCommission;
-    }
-    return 0;
-}
-
-function calculateCommissionPercent(price, netPrice, discount, category) {
-    let baseRate, maxDiscount;
-    switch (category) {
-        case "rivenditore":
-            baseRate = 1; // 1%
-            maxDiscount = 60;
-            break;
-        case "smontagomme":
-            baseRate = 7; // 7%
-            maxDiscount = 55;
-            break;
-        case "sollevamento":
-            baseRate = 3; // 3%
-            maxDiscount = 50;
-            break;
-        default:
-            return 0;
-    }
+function calculateCommission(price, netPrice, discount, maxDiscount, baseRate) {
+    let baseCommission = price * (1 - maxDiscount / 100) * baseRate;
     
     if (discount === maxDiscount) {
-        return baseRate;
+        return baseCommission;
     } else {
-        let difference = maxDiscount - discount;
+        let extraCommission = (netPrice - price * (1 - maxDiscount / 100)) * (baseRate / 2);
+        return baseCommission + extraCommission;
+    }
+}
+
+function calculateCommissionPercent(price, discount, maxDiscount, baseRate) {
+    if (discount === maxDiscount) {
+        return baseRate * 100;
+    } else {
         let extraCommissionRate = baseRate / 2;
-        let extraCommissionPercent = (difference / 2) * (extraCommissionRate / 100);
-        return baseRate + extraCommissionPercent;
+        let extraCommissionPercent = ((maxDiscount - discount) / 2) * extraCommissionRate * 100;
+        return (baseRate * 100) + extraCommissionPercent;
     }
 }
 
