@@ -7,6 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow: auto;
 }
 
 .container {
@@ -15,12 +16,15 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 320px;
+    width: 90%;
+    max-width: 400px;
+    margin-top: 20px;
 }
 
 h1 {
-    font-size: 20px;
+    font-size: 24px;
     color: #333;
+    margin-top: 10px;
 }
 
 label {
@@ -64,10 +68,10 @@ button:hover {
     font-weight: bold;
 }
 
-#netPrice, #commission {
+#netPrice, #commission, #commissionPercent, #discountedPrice60, #netCompany, #finalCompanyNet {
     font-weight: bold;
 }
 
-#netPrice.red, #commission.red {
+#netPrice.red, #commission.red, #commissionPercent.red, #netCompany.red, #finalCompanyNet.red {
     color: red;
 }
