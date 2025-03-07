@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
         let category = document.getElementById("category").value;
         let netPriceElem = document.getElementById("netPrice");
         let commissionElem = document.getElementById("commission");
+        let discountedPrice60Elem = document.getElementById("discountedPrice60");
+        let netCompanyElem = document.getElementById("netCompany");
+        let finalCompanyNetElem = document.getElementById("finalCompanyNet");
 
         if (isNaN(price) || isNaN(discount) || price <= 0 || discount < 0 || discount > 100) {
             alert("Inserisci valori validi.");
@@ -29,19 +32,43 @@ document.addEventListener("DOMContentLoaded", function () {
         if (discount > maxDiscount) {
             netPriceElem.innerText = "NON AUTORIZZATO";
             commissionElem.innerText = "NON AUTORIZZATO";
+            netCompanyElem.innerText = "NON AUTORIZZATO";
+            finalCompanyNetElem.innerText = "NON AUTORIZZATO";
             netPriceElem.classList.add("red");
             commissionElem.classList.add("red");
+            netCompanyElem.classList.add("red");
+            finalCompanyNetElem.classList.add("red");
             return;
         } else {
             netPriceElem.classList.remove("red");
             commissionElem.classList.remove("red");
+            netCompanyElem.classList.remove("red");
+            finalCompanyNetElem.classList.remove("red");
         }
 
         let netPrice = price * (1 - discount / 100);
         let commission = calculateCommission(price, netPrice, discount, category);
+        let discountedPrice60 = price * 0.4; // Prezzo scontato del 60%
+        let netCompany = netPrice - commission; // Netto azienda senza costi vari
 
         netPriceElem.innerText = netPrice.toFixed(2) + "€";
         commissionElem.innerText = commission.toFixed(2) + "€";
+        discountedPrice60Elem.innerText = discountedPrice60.toFixed(2) + "€";
+        netCompanyElem.innerText = netCompany.toFixed(2) + "€";
+    });
+
+    document.getElementById("calculateCostsBtn").addEventListener("click", function () {
+        let netCompany = parseFloat(document.getElementById("netCompany").innerText);
+        let extraCosts = parseFloat(document.getElementById("extraCosts").value);
+        let finalCompanyNetElem = document.getElementById("finalCompanyNet");
+
+        if (isNaN(netCompany) || isNaN(extraCosts)) {
+            alert("Inserisci un valore valido per i costi vari.");
+            return;
+        }
+
+        let finalCompanyNet = netCompany - extraCosts;
+        finalCompanyNetElem.innerText = finalCompanyNet.toFixed(2) + "€";
     });
 });
 
