@@ -97,3 +97,9 @@ L'app è sviluppata in **HTML, CSS e JavaScript** con logica ottimizzata per:
 3. **Inserire i dati e calcolare il compenso**
 
 ⚡ *ProvX rende il calcolo dei compensi semplice, trasparente ed efficace!* 🚀
+---
+
+## 📜 **Licenza**
+ProvX è distribuito sotto **licenza MIT**.
+
+© 2025 Alessandro Pezzali - [pezzaliAPP.com](https://www.pezzaliapp.com/)
