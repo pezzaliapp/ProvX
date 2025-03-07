@@ -1,1 +1,44 @@
-
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProvX - Calcolo Compensi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <h1>ProvX - Calcolo Compensi</h1>
+        <label for="price">Prezzo Lordo (€):</label>
+        <input type="number" id="price" placeholder="Inserisci il prezzo lordo">
+        
+        <label for="discount">Sconto applicato (%):</label>
+        <input type="number" id="discount" placeholder="Inserisci lo sconto">
+        
+        <label for="category">Seleziona la categoria:</label>
+        <select id="category">
+            <option value="rivenditore">Rivenditore</option>
+            <option value="smontagomme">Smontagomme + Equilibratici</option>
+            <option value="sollevamento">Sollevamento</option>
+        </select>
+        
+        <button id="calculateBtn">Calcola</button>
+        
+        <div class="results">
+            <h2>Risultati</h2>
+            <p>Prezzo Netto: <span id="netPrice">0.00€</span></p>
+            <p>Compenso Agente: <span id="commission">0.00€</span></p>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log('Service Worker registrato!', reg))
+                .catch(err => console.log('Errore nella registrazione del Service Worker', err));
+        }
+    </script>
+</body>
+</html>
