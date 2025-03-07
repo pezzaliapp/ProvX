@@ -43,13 +43,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         let netPrice = price * (1 - discount / 100);
-        let commission = calculateCommission(price, netPrice, discount, maxDiscount, baseRate);
-        let commissionPercent = calculateCommissionPercent(price, discount, maxDiscount, baseRate);
+        let baseNetPrice = price * (1 - maxDiscount / 100);
+        let baseCommission = baseNetPrice * baseRate;
+        
+        let extraCommission = 0;
+        if (discount < maxDiscount) {
+            extraCommission = (netPrice - baseNetPrice) * (baseRate / 2);
+        }
+        
+        let totalCommission = baseCommission + extraCommission;
+        let commissionPercent = ((totalCommission / netPrice) * 100);
         let discountedPrice60 = price * 0.4; // Prezzo scontato del 60%
-        let netCompany = netPrice - commission; // Netto azienda senza costi vari
+        let netCompany = netPrice - totalCommission; // Netto azienda senza costi vari
 
         netPriceElem.innerText = netPrice.toFixed(2) + "€";
-        commissionElem.innerText = commission.toFixed(2) + "€";
+        commissionElem.innerText = totalCommission.toFixed(2) + "€";
         commissionPercentElem.innerText = commissionPercent.toFixed(2) + "%";
         discountedPrice60Elem.innerText = discountedPrice60.toFixed(2) + "€";
         netCompanyElem.innerText = netCompany.toFixed(2) + "€";
@@ -69,27 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
         finalCompanyNetElem.innerText = finalCompanyNet.toFixed(2) + "€";
     });
 });
-
-function calculateCommission(price, netPrice, discount, maxDiscount, baseRate) {
-    let baseCommission = price * (1 - maxDiscount / 100) * baseRate;
-    
-    if (discount === maxDiscount) {
-        return baseCommission;
-    } else {
-        let extraCommission = (netPrice - price * (1 - maxDiscount / 100)) * (baseRate / 2);
-        return baseCommission + extraCommission;
-    }
-}
-
-function calculateCommissionPercent(price, discount, maxDiscount, baseRate) {
-    if (discount === maxDiscount) {
-        return baseRate * 100;
-    } else {
-        let extraCommissionRate = baseRate / 2;
-        let extraCommissionPercent = ((maxDiscount - discount) / 2) * extraCommissionRate * 100;
-        return (baseRate * 100) + extraCommissionPercent;
-    }
-}
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')
